@@ -1,0 +1,163 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: AppleFont;
+  src: url(fonts/SF-Pro-Display-Ultralight.otf);
+}
+
+:root {
+  --start-bg-color: #0b2a14;
+  --start-font-color: #3ecb63;
+  --start-hold-color: #06160c;
+  --lap-bg-color: #363337;
+  --lapoff-bg-color: #1f1c22;
+  --lapoff-font-color: #9c9ba0;
+  --lapoff-hold-bg-color: #0f0f0f;
+  --stop-bg-color: #350e0e;
+  --stop-font-color: #df3b33;
+  --stop-hold-bg-color: #1d0709;
+  --background: #020003;
+  --divisor-line: #211e21;
+  --scrollbar-color: #827f83;
+}
+
+body {
+  color: white;
+  font-family: "AppleFont";
+  height: 100vh;
+  font-variant-numeric: tabular-nums;
+}
+
+.centered__container {
+  display: flex;
+  width: 375px;
+  height: 812px;
+  flex-flow: column wrap;
+  background-color: var(--background);
+  padding: 0 5px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex: 1;
+}
+
+.timer {
+  font-size: 72px;
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer__list {
+  overflow: auto;
+  flex: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border-top: 1px solid var(--divisor-line);
+}
+
+tr td {
+  width: 50%;
+  padding: 0.5em;
+  height: 36px;
+}
+
+tr td:last-of-type {
+  text-align: right;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+  flex: 1;
+}
+
+.roundBtn {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  border: black 5px double;
+  cursor: pointer;
+}
+
+.timer__list::-webkit-scrollbar {
+  width: 3px;
+}
+
+.timer__list::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+  border-radius: 15px;
+}
+
+.timer__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.start {
+  background-color: var(--start-bg-color);
+  color: var(--start-font-color);
+}
+
+.start:active {
+  background-color: var(--start-hold-color);
+}
+
+.lap {
+  background-color: var(--lap-bg-color);
+  color: var(--lap-font-color);
+}
+
+.lap:active {
+  background-color: var(--lapoff-hold-bg-color);
+}
+
+.lapoff {
+  background-color: var(--lapoff-bg-color);
+  color: var(--lapoff-font-color);
+}
+
+.stop {
+  background-color: var(--stop-bg-color);
+  color: var(--stop-font-color);
+}
+
+.stop:active {
+  background-color: var(--stop-hold-bg-color);
+}
+
+.bottom__screen {
+  height: 40%;
+  overflow: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.best {
+  color: green;
+}
+
+.worst {
+  color: red;
+}
