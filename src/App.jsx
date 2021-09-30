@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 import LapsTable from "./components/LapsTable";
@@ -15,9 +15,9 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState([]);
   const [bestAndWorst, setBestAndWorst] = useState(initialBestAndWorstState);
-
-  const mainTimer = useTimer(isRunning);
-  const lapTimer = useTimer(isRunning);
+  const { elapsedTime, resetTimer } = useTimer(isRunning);
+  const lapsSum = laps.reduce((acc, lap) => acc + lap.lapTime, 0);
+  const lapTimer = elapsedTime - lapsSum;
 
   const stopStartButtonLabel = isRunning ? "Stop" : "Start";
   const lapResetButtonLabel = isRunning ? "Lap" : "Reset";
@@ -27,42 +27,38 @@ function App() {
   };
 
   const handleLaps = () => {
-    setLaps([
-      { lapNumber: laps.length + 1, lapTime: lapTimer.elapsedTime },
-      ...laps,
-    ]);
+    setLaps([{ lapNumber: laps.length + 1, lapTime: lapTimer }, ...laps]);
     getBestAndWorst();
-    lapTimer.resetTimer();
   };
 
   const getBestAndWorst = () => {
-    if (lapTimer.elapsedTime > bestAndWorst.worst) {
+    if (lapTimer > bestAndWorst.worst) {
       setBestAndWorst((prevState) => ({
         ...prevState,
-        worst: lapTimer.elapsedTime,
+        worst: lapTimer,
       }));
     }
-    if (lapTimer.elapsedTime < bestAndWorst.best) {
+    if (lapTimer < bestAndWorst.best) {
       setBestAndWorst((prevState) => ({
         ...prevState,
-        best: lapTimer.elapsedTime,
+        best: lapTimer,
       }));
     }
   };
 
   const handleReset = () => {
-    mainTimer.resetTimer();
-    lapTimer.resetTimer();
+    resetTimer();
     setBestAndWorst(initialBestAndWorstState);
     setLaps([]);
   };
 
-  const lapResetButtonHandler = isRunning ? handleLaps : handleReset;
+  const lapResetButtonHandler =
+    isRunning && elapsedTime ? handleLaps : handleReset;
 
   return (
     <div className="container">
       <div className="centered__container">
-        <p className="timer">{formatTime(mainTimer.elapsedTime)}</p>
+        <p className="timer">{formatTime(elapsedTime)}</p>
         <div className="buttons">
           <Button
             handler={lapResetButtonHandler}
@@ -77,8 +73,8 @@ function App() {
         </div>
         <LapsTable
           laps={laps}
-          currentLapTime={formatTime(lapTimer.elapsedTime)}
-          started={mainTimer.elapsedTime > 0}
+          currentLapTime={formatTime(lapTimer)}
+          started={elapsedTime > 0}
           bestAndWorst={bestAndWorst}
         />
       </div>
