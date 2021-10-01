@@ -17,7 +17,7 @@ export const formatTime = (timeInMilliseconds) => {
         padTime(formattedMinutes) +
         ':' +
         padTime(formattedSeconds) +
-        ':' +
+        '.' +
         padTime(flooredHundredthSecond)
-    : padTime(formattedMinutes) + ':' + padTime(formattedSeconds) + ':' + padTime(flooredHundredthSecond);
+    : padTime(formattedMinutes) + ':' + padTime(formattedSeconds) + '.' + padTime(flooredHundredthSecond);
 };
