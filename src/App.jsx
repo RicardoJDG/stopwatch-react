@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState } from 'react';
+import './App.css';
 
-import LapsTable from "./components/LapsTable";
-import Button from "./components/Button";
+import LapsTable from './components/LapsTable';
+import Button from './components/Button';
 
-import { useTimer } from "./hooks/useTimer";
-import { formatTime } from "./utils/formatting";
+import { useTimer } from './hooks/useTimer';
+import { formatTime } from './utils/formatting';
+
+const initialBestAndWorstState = {
+  best: Number.POSITIVE_INFINITY,
+  worst: Number.NEGATIVE_INFINITY,
+};
 
 function App() {
-  const initialBestAndWorstState = {
-    best: Number.POSITIVE_INFINITY,
-    worst: Number.NEGATIVE_INFINITY,
-  };
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState([]);
   const [bestAndWorst, setBestAndWorst] = useState(initialBestAndWorstState);
@@ -19,8 +20,8 @@ function App() {
   const lapsSum = laps.reduce((acc, lap) => acc + lap.lapTime, 0);
   const lapTimer = elapsedTime - lapsSum;
 
-  const stopStartButtonLabel = isRunning ? "Stop" : "Start";
-  const lapResetButtonLabel = isRunning ? "Lap" : "Reset";
+  const stopStartButtonLabel = isRunning ? 'Stop' : 'Start';
+  const lapResetButtonLabel = isRunning ? 'Lap' : 'Reset';
 
   const handleStartStop = () => {
     setIsRunning((isRunning) => !isRunning);
@@ -52,19 +53,14 @@ function App() {
     setLaps([]);
   };
 
-  const lapResetButtonHandler =
-    isRunning && elapsedTime ? handleLaps : handleReset;
+  const lapResetButtonHandler = isRunning && elapsedTime ? handleLaps : handleReset;
 
   return (
     <div className="container">
       <div className="centered__container">
         <p className="timer">{formatTime(elapsedTime)}</p>
         <div className="buttons">
-          <Button
-            handler={lapResetButtonHandler}
-            label={lapResetButtonLabel}
-            classButton="lap"
-          />
+          <Button handler={lapResetButtonHandler} label={lapResetButtonLabel} classButton="lap" />
           <Button
             handler={handleStartStop}
             label={stopStartButtonLabel}

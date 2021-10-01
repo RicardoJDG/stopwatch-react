@@ -1,13 +1,8 @@
-import React from "react";
-import EmptyLaps from "./EmptyLaps";
-import { formatTime } from "../utils/formatting";
+import React from 'react';
+import EmptyLaps from './EmptyLaps';
+import { formatTime } from '../utils/formatting';
 
-const LapsTable = ({
-  laps,
-  currentLapTime,
-  started,
-  bestAndWorst: { best, worst },
-}) => {
+const LapsTable = ({ laps, currentLapTime, started, bestAndWorst: { best, worst } }) => {
   return (
     <div className="timer__list">
       <table>
@@ -23,10 +18,10 @@ const LapsTable = ({
               key={lap.lapNumber}
               className={
                 lap.lapTime === best && laps.length > 1
-                  ? "best"
+                  ? 'best'
                   : lap.lapTime === worst && laps.length > 1
-                  ? "worst"
-                  : ""
+                  ? 'worst'
+                  : ''
               }
             >
               <td>{`Lap ${lap.lapNumber}`}</td>
