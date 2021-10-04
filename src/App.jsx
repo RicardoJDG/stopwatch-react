@@ -11,6 +11,7 @@ import { initialLapState, Actions, reducer } from './lapsReducer';
 function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [laps, dispatch] = useReducer(reducer, initialLapState);
+
   const { elapsedTime, resetTimer } = useTimer(isRunning);
   const lapTimer = elapsedTime - laps.totalLapsTime;
 
