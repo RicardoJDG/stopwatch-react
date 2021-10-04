@@ -16,12 +16,11 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState([]);
   const [bestAndWorst, setBestAndWorst] = useState(initialBestAndWorstState);
+
   const { elapsedTime, resetTimer } = useTimer(isRunning);
+
   const lapsSum = laps.reduce((acc, lap) => acc + lap.lapTime, 0);
   const lapTimer = elapsedTime - lapsSum;
-
-  const stopStartButtonLabel = isRunning ? 'Stop' : 'Start';
-  const lapResetButtonLabel = isRunning ? 'Lap' : 'Reset';
 
   const handleStartStop = () => {
     setIsRunning((isRunning) => !isRunning);
@@ -53,6 +52,9 @@ function App() {
     setLaps([]);
   };
 
+  const stopStartButtonLabel = isRunning ? 'Stop' : 'Start';
+  const stopStartButtonClass = isRunning ? 'stop' : 'start';
+  const lapResetButtonLabel = isRunning ? 'Lap' : 'Reset';
   const lapResetButtonHandler = isRunning && elapsedTime ? handleLaps : handleReset;
 
   return (
@@ -64,7 +66,7 @@ function App() {
           <Button
             handler={handleStartStop}
             label={stopStartButtonLabel}
-            classButton={stopStartButtonLabel.toLowerCase()}
+            classButton={stopStartButtonClass} //Would it be better to just have a new variable
           />
         </div>
         <LapsTable
