@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
+
+import { Actions, reducer, initialLapState } from '../lapsReducer';
 
 export const useTimer = (isRunning) => {
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [laps, dispatch] = useReducer(reducer, initialLapState);
+  const { elapsedTime } = laps;
 
   useEffect(() => {
     if (isRunning) {
       const startTime = Date.now() - elapsedTime;
       const intervalId = setInterval(() => {
         const currentTime = Date.now();
-        setElapsedTime(currentTime - startTime);
+        dispatch({ type: Actions.UPDATE_TIMER, payload: { time: currentTime - startTime } });
       });
       return () => {
         clearInterval(intervalId);
@@ -16,9 +19,5 @@ export const useTimer = (isRunning) => {
     }
   }, [isRunning]);
 
-  const resetTimer = () => {
-    setElapsedTime(0);
-  };
-
-  return { elapsedTime, resetTimer };
+  return { elapsedTime };
 };

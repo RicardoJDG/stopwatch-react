@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 
 import LapsTable from './components/LapsTable';
@@ -9,26 +9,22 @@ import { formatTime } from './utils/formatting';
 import { initialLapState, Actions, reducer } from './lapsReducer';
 
 function App() {
-  const [isRunning, setIsRunning] = useState(false);
   const [laps, dispatch] = useReducer(reducer, initialLapState);
 
-  const { elapsedTime, resetTimer } = useTimer(isRunning);
-  const lapTimer = elapsedTime - laps.totalLapsTime;
+  const { elapsedTime } = useTimer(laps.isRunning);
+  let lapTimer = elapsedTime - laps.totalLapsTime;
 
-  const stopStartButtonLabel = isRunning ? 'Stop' : 'Start';
-  const lapResetButtonLabel = isRunning ? 'Lap' : 'Reset';
+  const stopStartButtonLabel = laps.isRunning ? 'Stop' : 'Start';
+  const lapResetButtonLabel = laps.isRunning ? 'Lap' : 'Reset';
 
-  const handleStartStop = () => setIsRunning((isRunning) => !isRunning);
+  const handleStartStop = () => dispatch({ type: Actions.TOGGLE_TIMER });
 
   const handleLaps = () =>
     dispatch({ type: Actions.RECORD_LAP, payload: { lapNumber: laps.laps.length + 1, lapTime: lapTimer } });
 
-  const handleReset = () => {
-    resetTimer();
-    dispatch({ type: Actions.RESET });
-  };
+  const handleReset = () => dispatch({ type: Actions.RESET });
 
-  const lapResetButtonHandler = isRunning && elapsedTime ? handleLaps : handleReset;
+  const lapResetButtonHandler = laps.isRunning && elapsedTime ? handleLaps : handleReset;
 
   return (
     <div className="container">
