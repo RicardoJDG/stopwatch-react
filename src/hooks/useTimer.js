@@ -1,23 +1,16 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 
-import { Actions, reducer, initialLapState } from '../lapsReducer';
-
-export const useTimer = (isRunning) => {
-  const [laps, dispatch] = useReducer(reducer, initialLapState);
-  const { elapsedTime } = laps;
-
+export const useTimer = (state, updateTime) => {
   useEffect(() => {
-    if (isRunning) {
-      const startTime = Date.now() - elapsedTime;
+    if (state.isRunning) {
+      const startTime = Date.now() - state.elapsedTime;
       const intervalId = setInterval(() => {
         const currentTime = Date.now();
-        dispatch({ type: Actions.UPDATE_TIMER, payload: { time: currentTime - startTime } });
+        updateTime(currentTime - startTime);
       });
       return () => {
         clearInterval(intervalId);
       };
     }
-  }, [isRunning]);
-
-  return { elapsedTime };
+  }, [state.isRunning]);
 };

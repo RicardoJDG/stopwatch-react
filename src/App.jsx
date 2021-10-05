@@ -11,8 +11,10 @@ import { initialLapState, Actions, reducer } from './lapsReducer';
 function App() {
   const [laps, dispatch] = useReducer(reducer, initialLapState);
 
-  const { elapsedTime } = useTimer(laps.isRunning);
-  let lapTimer = elapsedTime - laps.totalLapsTime;
+  const updateTime = (timeToUpdate) => dispatch({ type: Actions.UPDATE_TIMER, payload: { time: timeToUpdate } });
+
+  useTimer(laps, updateTime);
+  let lapTimer = laps.elapsedTime - laps.totalLapsTime;
 
   const stopStartButtonLabel = laps.isRunning ? 'Stop' : 'Start';
   const lapResetButtonLabel = laps.isRunning ? 'Lap' : 'Reset';
@@ -24,12 +26,12 @@ function App() {
 
   const handleReset = () => dispatch({ type: Actions.RESET });
 
-  const lapResetButtonHandler = laps.isRunning && elapsedTime ? handleLaps : handleReset;
+  const lapResetButtonHandler = laps.isRunning && laps.elapsedTime ? handleLaps : handleReset;
 
   return (
     <div className="container">
       <div className="centered__container">
-        <div className="timer">{formatTime(elapsedTime)}</div>
+        <div className="timer">{formatTime(laps.elapsedTime)}</div>
         <div className="buttons">
           <Button handler={lapResetButtonHandler} label={lapResetButtonLabel} classButton="lap" />
           <Button
@@ -41,7 +43,7 @@ function App() {
         <LapsTable
           laps={laps.laps}
           currentLapTime={formatTime(lapTimer)}
-          started={elapsedTime > 0}
+          started={laps.elapsedTime > 0}
           best={laps.best}
           worst={laps.worst}
         />
