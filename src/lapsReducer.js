@@ -16,14 +16,16 @@ const Actions = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'RECORD_LAP':
+    case 'RECORD_LAP': {
+      const lapTime = state.elapsedTime - state.totalLapsTime;
       return {
         ...state,
-        laps: [action.payload, ...state.laps],
-        totalLapsTime: state.totalLapsTime + action.payload.lapTime,
-        best: action.payload.lapTime < state.best ? action.payload.lapTime : state.best,
-        worst: action.payload.lapTime > state.worst ? action.payload.lapTime : state.worst,
+        laps: [{ lapNumber: state.laps.length + 1, lapTime: lapTime }, ...state.laps],
+        totalLapsTime: state.totalLapsTime + lapTime,
+        best: lapTime < state.best ? lapTime : state.best,
+        worst: lapTime > state.worst ? lapTime : state.worst,
       };
+    }
     case 'RESET':
       return initialLapState;
     case 'TOGGLE_TIMER':
