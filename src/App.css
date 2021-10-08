@@ -25,9 +25,13 @@
   --scrollbar-color: #827f83;
 }
 
+#root {
+  height: 100%;
+}
+
 body {
   color: white;
-  font-family: "AppleFont";
+  font-family: 'AppleFont';
   height: 100vh;
   font-variant-numeric: tabular-nums;
 }
@@ -39,6 +43,7 @@ body {
   flex-flow: column wrap;
   background-color: var(--background);
   padding: 0 5px;
+  border-radius: 1%;
 }
 
 .container {
@@ -46,7 +51,6 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
-  flex: 1;
 }
 
 .timer {
@@ -59,10 +63,12 @@ body {
 
 .timer__list {
   overflow: auto;
-  flex: 3;
+  flex: 3.5;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  font-size: 24px;
+  margin-bottom: 5px;
 }
 
 table {

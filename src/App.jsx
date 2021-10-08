@@ -17,8 +17,10 @@ function App() {
 
   const lapTimer = laps.elapsedTime - laps.totalLapsTime;
 
+  const isDisabled = !laps.isRunning && laps.elapsedTime === 0;
   const stopStartButtonLabel = laps.isRunning ? 'Stop' : 'Start';
-  const lapResetButtonLabel = laps.isRunning ? 'Lap' : 'Reset';
+  const lapResetButtonLabel = isDisabled || laps.isRunning ? 'Lap' : 'Reset';
+  const lapClass = isDisabled ? 'lapoff' : 'lap';
 
   const handleStartStop = () => dispatch({ type: Actions.TOGGLE_TIMER });
   const handleLaps = () => dispatch({ type: Actions.RECORD_LAP });
@@ -31,7 +33,12 @@ function App() {
       <div className="centered__container">
         <div className="timer">{formatTime(laps.elapsedTime)}</div>
         <div className="buttons">
-          <Button handler={lapResetButtonHandler} label={lapResetButtonLabel} classButton="lap" />
+          <Button
+            handler={lapResetButtonHandler}
+            label={lapResetButtonLabel}
+            classButton={lapClass}
+            disabled={!laps.isRunning && !laps.elapsedTime}
+          />
           <Button
             handler={handleStartStop}
             label={stopStartButtonLabel}
