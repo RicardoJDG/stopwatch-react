@@ -1,21 +1,19 @@
 import React from 'react';
 import EmptyLaps from './EmptyLaps';
+import LapRow from './LapRow';
 import { formatTime } from '../utils/formatting';
 
-const LapsTable = ({ laps, currentLapTime, started, bestAndWorst: { best, worst } }) => {
+const LapsTable = ({ laps, currentLapTime, started, best, worst }) => {
   return (
     <div className="timer__list">
       <table>
         <tbody>
-          {started ? (
-            <tr>
-              <td>{`Lap ${laps.length + 1}`}</td>
-              <td>{currentLapTime}</td>
-            </tr>
-          ) : null}
+          {started ? <LapRow lapNumber={laps.length + 1} lapTime={currentLapTime} /> : null}
           {laps.map((lap) => (
-            <tr
+            <LapRow
               key={lap.lapNumber}
+              lapNumber={lap.lapNumber}
+              lapTime={formatTime(lap.lapTime)}
               className={
                 lap.lapTime === best && laps.length > 1
                   ? 'best'
@@ -23,10 +21,7 @@ const LapsTable = ({ laps, currentLapTime, started, bestAndWorst: { best, worst 
                   ? 'worst'
                   : ''
               }
-            >
-              <td>{`Lap ${lap.lapNumber}`}</td>
-              <td>{formatTime(lap.lapTime)}</td>
-            </tr>
+            />
           ))}
           <EmptyLaps laps={laps} />
         </tbody>

@@ -1,22 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-export const useTimer = (isRunning) => {
-  const [elapsedTime, setElapsedTime] = useState(0);
-
+export const useTimer = (state, updateTime) => {
   useEffect(() => {
-    if (isRunning) {
-      const startTime = Date.now() - elapsedTime;
+    if (state.isRunning) {
+      const startTime = Date.now() - state.elapsedTime;
       const intervalId = setInterval(() => {
         const currentTime = Date.now();
-        setElapsedTime(currentTime - startTime);
+        updateTime(currentTime - startTime);
       });
-      return () => clearInterval(intervalId);
+      return () => {
+        clearInterval(intervalId);
+      };
     }
-  }, [isRunning]);
-
-  const resetTimer = () => {
-    setElapsedTime(0);
-  };
-
-  return { elapsedTime, resetTimer };
+  }, [state.isRunning]);
 };

@@ -6,6 +6,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
         "react-app",
         "prettier"
     ],
@@ -26,6 +27,8 @@
             "endOfLine": "auto"
         }],
         "no-unused-vars": "warn",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     }
 }

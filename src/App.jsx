@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 
 import LapsTable from './components/LapsTable';
@@ -6,74 +6,51 @@ import Button from './components/Button';
 
 import { useTimer } from './hooks/useTimer';
 import { formatTime } from './utils/formatting';
-
-const initialBestAndWorstState = {
-  best: Number.POSITIVE_INFINITY,
-  worst: Number.NEGATIVE_INFINITY,
-};
+import { initialLapState, Actions, reducer } from './lapsReducer';
 
 function App() {
-  const [isRunning, setIsRunning] = useState(false);
-  const [laps, setLaps] = useState([]);
-  const [bestAndWorst, setBestAndWorst] = useState(initialBestAndWorstState);
+  const [laps, dispatch] = useReducer(reducer, initialLapState);
 
-  const { elapsedTime, resetTimer } = useTimer(isRunning);
+  const updateTime = (timeToUpdate) => dispatch({ type: Actions.UPDATE_TIMER, payload: { time: timeToUpdate } });
 
-  const lapsSum = laps.reduce((acc, lap) => acc + lap.lapTime, 0);
-  const lapTimer = elapsedTime - lapsSum;
+  useTimer(laps, updateTime);
 
-  const handleStartStop = () => {
-    setIsRunning((isRunning) => !isRunning);
-  };
+  const lapTimer = laps.elapsedTime - laps.totalLapsTime;
 
-  const handleLaps = () => {
-    setLaps([{ lapNumber: laps.length + 1, lapTime: lapTimer }, ...laps]);
-    getBestAndWorst();
-  };
+  const isDisabled = !laps.isRunning && laps.elapsedTime === 0;
+  const stopStartButtonLabel = laps.isRunning ? 'Stop' : 'Start';
+  const lapResetButtonLabel = isDisabled || laps.isRunning ? 'Lap' : 'Reset';
+  const lapClass = isDisabled ? 'lapoff' : 'lap';
 
-  const getBestAndWorst = () => {
-    if (lapTimer > bestAndWorst.worst) {
-      setBestAndWorst((prevState) => ({
-        ...prevState,
-        worst: lapTimer,
-      }));
-    }
-    if (lapTimer < bestAndWorst.best) {
-      setBestAndWorst((prevState) => ({
-        ...prevState,
-        best: lapTimer,
-      }));
-    }
-  };
+  const handleStartStop = () => dispatch({ type: Actions.TOGGLE_TIMER });
+  const handleLaps = () => dispatch({ type: Actions.RECORD_LAP });
+  const handleReset = () => dispatch({ type: Actions.RESET });
 
-  const handleReset = () => {
-    resetTimer();
-    setBestAndWorst(initialBestAndWorstState);
-    setLaps([]);
-  };
-
-  const stopStartButtonLabel = isRunning ? 'Stop' : 'Start';
-  const stopStartButtonClass = isRunning ? 'stop' : 'start';
-  const lapResetButtonLabel = isRunning ? 'Lap' : 'Reset';
-  const lapResetButtonHandler = isRunning && elapsedTime ? handleLaps : handleReset;
+  const lapResetButtonHandler = laps.isRunning && laps.elapsedTime ? handleLaps : handleReset;
 
   return (
     <div className="container">
       <div className="centered__container">
-        <p className="timer">{formatTime(elapsedTime)}</p>
+        <div className="timer">{formatTime(laps.elapsedTime)}</div>
         <div className="buttons">
-          <Button handler={lapResetButtonHandler} label={lapResetButtonLabel} classButton="lap" />
+          <Button
+            handler={lapResetButtonHandler}
+            label={lapResetButtonLabel}
+            classButton={lapClass}
+            disabled={!laps.isRunning && !laps.elapsedTime}
+          />
           <Button
             handler={handleStartStop}
             label={stopStartButtonLabel}
-            classButton={stopStartButtonClass} //Would it be better to just have a new variable
+            classButton={stopStartButtonLabel.toLowerCase()} //Would it be better to just have a new variable
           />
         </div>
         <LapsTable
-          laps={laps}
+          laps={laps.laps}
           currentLapTime={formatTime(lapTimer)}
-          started={elapsedTime > 0}
-          bestAndWorst={bestAndWorst}
+          started={laps.elapsedTime > 0}
+          best={laps.best}
+          worst={laps.worst}
         />
       </div>
     </div>
