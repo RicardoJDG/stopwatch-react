@@ -6,7 +6,7 @@
 
 @font-face {
   font-family: AppleFont;
-  src: url(fonts/SF-Pro-Display-Ultralight.otf);
+  src: url(../fonts/SF-Pro-Display-Ultralight.otf);
 }
 
 :root {
